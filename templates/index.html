@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CIT Campus Event Board | Student Events & Registration</title>
+  <meta name="description" content="Centralized campus event discovery, tracking, and registration portal with automated CI/CD DevOps integration.">
+  
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- App Stylesheet -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+  <!-- Top Navbar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="/" class="brand">
+        <div class="brand-icon">
+          <i class="fa-solid fa-graduation-cap"></i>
+        </div>
+        <div>
+          <h1 class="brand-title">Campus Event Board</h1>
+          <p class="brand-subtitle">CIT Student Life & Activities</p>
+        </div>
+      </a>
+
+      <div class="nav-search">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="searchInput" placeholder="Search hackathons, workshops, cultural fests, venues..." aria-label="Search campus events">
+      </div>
+
+      <div class="nav-actions">
+        <button class="btn btn-secondary" id="myTicketsBtn">
+          <i class="fa-solid fa-ticket"></i> My Passes
+        </button>
+        <a href="/admin" class="btn btn-primary">
+          <i class="fa-solid fa-shield-halved"></i> Admin Portal
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Hero Banner -->
+    <section class="hero-section">
+      <div class="hero-content">
+        <div class="badge-live">
+          <span class="pulse-dot"></span>
+          <span>Semester VII • DevOps Lab Showcase Active</span>
+        </div>
+        <h2 class="hero-title">
+          Connect. Compete. <span>Celebrate.</span>
+        </h2>
+        <p class="hero-desc">
+          Your one-stop digital hub for Coimbatore Institute of Technology extracurricular events, national hackathons, technical symposiums, and cultural fests.
+        </p>
+
+        <div class="hero-stats">
+          <div class="stat-box">
+            <div class="stat-num" id="statTotalEvents">0</div>
+            <div class="stat-label">Total Events</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num" id="statTotalOpen" style="color: #34d399;">0</div>
+            <div class="stat-label">Open Now</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num" id="statTotalReg" style="color: #60a5fa;">0</div>
+            <div class="stat-label">Registrations</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num" style="color: #c084fc;">Docker</div>
+            <div class="stat-label">Containerized</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Filters & Category Navigation -->
+    <div class="filter-bar">
+      <div class="category-chips">
+        <button class="chip active" data-category="all">
+          <i class="fa-solid fa-layer-group"></i> All Events
+        </button>
+        <button class="chip" data-category="Hackathon">
+          <i class="fa-solid fa-code"></i> Hackathons
+        </button>
+        <button class="chip" data-category="Workshop">
+          <i class="fa-solid fa-laptop-code"></i> Workshops
+        </button>
+        <button class="chip" data-category="Cultural">
+          <i class="fa-solid fa-masks-theater"></i> Cultural
+        </button>
+        <button class="chip" data-category="Technical">
+          <i class="fa-solid fa-microchip"></i> Technical
+        </button>
+        <button class="chip" data-category="Sports">
+          <i class="fa-solid fa-volleyball"></i> Sports
+        </button>
+        <button class="chip" data-category="Seminar">
+          <i class="fa-solid fa-graduation-cap"></i> Seminars
+        </button>
+      </div>
+    </div>
+
+    <!-- Events Grid -->
+    <section class="events-grid" id="eventsContainer" aria-label="Campus Events List">
+      <!-- Dynamically filled with event cards -->
+    </section>
+  </main>
+
+  <!-- Registration Modal -->
+  <div class="modal-overlay" id="regModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">
+          <i class="fa-solid fa-id-card" style="color: var(--primary);"></i>
+          Register for Event
+        </h3>
+        <button class="btn-close" data-close-modal aria-label="Close modal">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div style="background: rgba(59, 130, 246, 0.08); border: 1px solid var(--border-accent); border-radius: var(--radius-md); padding: 1rem; margin-bottom: 1.25rem;">
+          <h4 id="modalEventTitle" style="font-size: 1.1rem; color: var(--text-primary); margin-bottom: 0.25rem;">Event Title</h4>
+          <p id="modalEventSub" style="font-size: 0.8rem; color: #60a5fa; margin-bottom: 0.25rem;">Date & Time</p>
+          <p id="modalEventVenue" style="font-size: 0.8rem; color: var(--text-secondary);"><i class="fa-solid fa-location-dot"></i> Venue</p>
+        </div>
+
+        <div id="regErrorMsg" style="display: none; background: rgba(244, 63, 94, 0.15); border: 1px solid rgba(244, 63, 94, 0.3); color: #fb7185; padding: 0.75rem; border-radius: var(--radius-md); font-size: 0.85rem; margin-bottom: 1rem;">
+        </div>
+
+        <form id="regForm">
+          <input type="hidden" id="regEventId">
+          
+          <div class="form-group">
+            <label class="form-label" for="studentName">Full Student Name *</label>
+            <input type="text" class="form-control" id="studentName" required placeholder="e.g. Jayasree R">
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="rollNo">Register / Roll Number *</label>
+              <input type="text" class="form-control" id="rollNo" required placeholder="e.g. 2303717620522022">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="department">Department *</label>
+              <select class="form-control" id="department" required>
+                <option value="">Select Dept</option>
+                <option value="Information Technology">Information Technology</option>
+                <option value="Computer Science">Computer Science</option>
+                <option value="ECE">ECE</option>
+                <option value="EEE">EEE</option>
+                <option value="Mechanical">Mechanical</option>
+                <option value="Civil Engineering">Civil Engineering</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="year">Year of Study *</label>
+              <select class="form-control" id="year" required>
+                <option value="IV Year">IV Year (Semester VII/VIII)</option>
+                <option value="III Year">III Year (Semester V/VI)</option>
+                <option value="II Year">II Year (Semester III/IV)</option>
+                <option value="I Year">I Year (Semester I/II)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="phone">Contact Number</label>
+              <input type="tel" class="form-control" id="phone" placeholder="e.g. +91 9876543210">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="email">College / Personal Email *</label>
+            <input type="email" class="form-control" id="email" required placeholder="student@cit.edu.in">
+          </div>
+
+          <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem;">
+            <button type="button" class="btn btn-secondary" data-close-modal>Cancel</button>
+            <button type="submit" class="btn btn-primary">
+              <i class="fa-solid fa-check"></i> Confirm Registration
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ticket Pass Modal -->
+  <div class="modal-overlay" id="ticketModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title" style="color: #34d399;">
+          <i class="fa-solid fa-circle-check"></i>
+          Registration Confirmed!
+        </h3>
+        <button class="btn-close" data-close-modal aria-label="Close modal">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div class="ticket-pass">
+          <div class="ticket-header">
+            <div>
+              <p style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.05em;">CIT Digital Event Pass</p>
+              <h4 id="passEvent" style="font-size: 1.15rem; color: var(--text-primary); margin-top: 0.2rem;">Event Name</h4>
+            </div>
+            <div class="ticket-code" id="passCode">CIT-EVT-XXXXXX</div>
+          </div>
+
+          <div class="ticket-grid">
+            <div class="ticket-field">
+              <label>Student Name</label>
+              <span id="passStudent">-</span>
+            </div>
+            <div class="ticket-field">
+              <label>Roll Number</label>
+              <span id="passRoll">-</span>
+            </div>
+            <div class="ticket-field">
+              <label>Date & Time</label>
+              <span id="passDate">-</span>
+            </div>
+            <div class="ticket-field">
+              <label>Venue</label>
+              <span id="passVenue">-</span>
+            </div>
+          </div>
+
+          <div style="border-top: 1px dashed var(--border-color); padding-top: 0.75rem; display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted);">
+            <span><i class="fa-solid fa-shield"></i> Verified CIT Pass</span>
+            <span>Show at entrance gate</span>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem;">
+          <button type="button" class="btn btn-secondary" onclick="window.print()">
+            <i class="fa-solid fa-print"></i> Print Pass
+          </button>
+          <button type="button" class="btn btn-primary" data-close-modal>
+            Done
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- My Passes Modal -->
+  <div class="modal-overlay" id="myTicketsModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">
+          <i class="fa-solid fa-ticket" style="color: var(--primary);"></i>
+          My Event Registrations
+        </h3>
+        <button class="btn-close" data-close-modal aria-label="Close modal">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div id="myTicketsList">
+          <!-- Dynamically populated from localStorage -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-links">
+      <a href="/"><i class="fa-solid fa-house"></i> Home</a>
+      <a href="/admin"><i class="fa-solid fa-gauge"></i> Admin Dashboard</a>
+      <a href="/health"><i class="fa-solid fa-heart-pulse"></i> Service Health</a>
+    </div>
+    <p>
+      23IT723 – DevOps Laboratory | Coimbatore Institute of Technology | Autonomous Institution
+    </p>
+    <p style="margin-top: 0.4rem; font-size: 0.8rem; color: var(--text-muted);">
+      Built with Flask • Docker • Pytest • Jenkins CI/CD • Ansible Deployment • SQLite Volume Persistence
+    </p>
+  </footer>
+
+  <!-- App Script -->
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
