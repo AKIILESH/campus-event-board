@@ -1,0 +1,24 @@
+---
+- name: Deploy Campus Event Board Container
+  hosts: dockerhost
+  gather_facts: false
+  tasks:
+    - name: Ensure Persistent Docker Volume Exists
+      community.docker.docker_volume:
+        name: eventboard_data
+        state: present
+
+    - name: Manage Campus Event Board Container
+      community.docker.docker_container:
+        name: campus-event-ansible
+        image: campus-event-ci
+        state: "{{ container_state | default('started') }}"
+        restart_policy: unless-stopped
+        recreate: true
+        published_ports:
+          - "5001:5000"
+        volumes:
+          - "eventboard_data:/app/data"
+        env:
+          PORT: "5000"
+          DB_DIR: "/app/data"
