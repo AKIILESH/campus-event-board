@@ -312,7 +312,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     listEl.innerHTML = tickets.map(t => `
-      <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1rem; margin-bottom: 0.75rem;">
+      <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1rem; margin-bottom: 0.75rem;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
           <strong style="color: var(--primary); font-family: monospace;">${escapeHtml(t.ticket_code)}</strong>
           <span style="font-size: 0.75rem; color: var(--text-muted);">${escapeHtml(t.roll_no)}</span>

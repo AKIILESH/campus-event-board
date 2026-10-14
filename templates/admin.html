@@ -18,7 +18,7 @@
   <header class="navbar">
     <div class="nav-container">
       <a href="/" class="brand">
-        <div class="brand-icon" style="background: linear-gradient(135deg, #10b981, #3b82f6);">
+        <div class="brand-icon" style="background: linear-gradient(135deg, #10b981, #059669);">
           <i class="fa-solid fa-gauge-high"></i>
         </div>
         <div>
@@ -49,15 +49,15 @@
         <div class="stat-label">Total Events</div>
       </div>
       <div class="stat-box">
-        <div class="stat-num" id="adminActiveEvents" style="color: #34d399;"><div class="skeleton" style="height: 28px; width: 50px;"></div></div>
+        <div class="stat-num" id="adminActiveEvents" style="color: var(--primary);"><div class="skeleton" style="height: 28px; width: 50px;"></div></div>
         <div class="stat-label">Active / Open</div>
       </div>
       <div class="stat-box">
-        <div class="stat-num" id="adminTotalReg" style="color: #60a5fa;"><div class="skeleton" style="height: 28px; width: 50px;"></div></div>
+        <div class="stat-num" id="adminTotalReg" style="color: var(--accent-emerald);"><div class="skeleton" style="height: 28px; width: 50px;"></div></div>
         <div class="stat-label">Student RSVPs</div>
       </div>
       <div class="stat-box">
-        <div class="stat-num" id="adminTotalCap" style="color: #c084fc;"><div class="skeleton" style="height: 28px; width: 50px;"></div></div>
+        <div class="stat-num" id="adminTotalCap" style="color: var(--accent-forest);"><div class="skeleton" style="height: 28px; width: 50px;"></div></div>
         <div class="stat-label">Campus Capacity</div>
       </div>
     </div>
@@ -310,7 +310,7 @@
 
         regTbody.innerHTML = list.map(r => `
           <tr>
-            <td><strong style="color:#60a5fa; font-family:monospace;">${escapeHtml(r.ticket_code)}</strong></td>
+            <td><strong style="color:var(--primary); font-family:monospace;">${escapeHtml(r.ticket_code)}</strong></td>
             <td><strong>${escapeHtml(r.student_name)}</strong></td>
             <td><code>${escapeHtml(r.roll_no)}</code></td>
             <td>${escapeHtml(r.department)}<br><small style="color:var(--text-muted);">${escapeHtml(r.year)}</small></td>

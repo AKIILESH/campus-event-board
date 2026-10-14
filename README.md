@@ -93,35 +93,85 @@ pip install -r requirements.txt
 pytest test_app.py -v
 
 # Run the Flask application
-python app.py
+# Note: On macOS, port 5000 is often reserved by AirPlay/ControlCenter; use PORT=5001:
+PORT=5001 python app.py
 ```
 Access the application locally at:
-- **Public Portal**: [http://localhost:5000](http://localhost:5000)
-- **Admin Dashboard**: [http://localhost:5000/admin](http://localhost:5000/admin)
-- **Health Check**: [http://localhost:5000/health](http://localhost:5000/health)
+- **Public Portal**: [http://localhost:5001](http://localhost:5001)
+- **Admin Dashboard**: [http://localhost:5001/admin](http://localhost:5001/admin)
+- **Health Check**: [http://localhost:5001/health](http://localhost:5001/health)
 
 ---
 
-### 2. Docker Containerization Workflow
+### 2. SQLite Terminal Database Inspection
+
+To query and inspect the persistent SQLite database directly from your terminal:
+
+```bash
+# Open SQLite interactive CLI
+sqlite3 data/events.db
+```
+
+Useful commands inside the `sqlite>` prompt:
+```sql
+-- Format as readable grid table
+.mode table
+.headers on
+
+-- View all database tables
+.tables
+
+-- View schema definitions
+.schema events
+.schema registrations
+
+-- View all events
+SELECT id, title, category, registered_count, capacity, status FROM events;
+
+-- View attendee registrations
+SELECT ticket_code, student_name, roll_no, department, email FROM registrations;
+
+-- Exit
+.quit
+```
+
+Quick terminal one-liner:
+```bash
+sqlite3 -header -column data/events.db "SELECT id, title, category, registered_count, capacity, status FROM events;"
+```
+
+---
+
+### 3. Docker Containerization Workflow
 
 #### Step A: Build the Docker Image
 ```bash
 docker build -t campus-event-ci .
 ```
 
-#### Step B: Run Automated Tests Inside Docker Container
+#### Step B: View and Inspect Docker Image
+```bash
+# List local images
+docker images
+
+# Inspect image details and layer metadata
+docker inspect campus-event-ci
+docker history campus-event-ci
+```
+
+#### Step C: Run Automated Tests Inside Docker Container
 ```bash
 docker run --rm campus-event-ci python -m pytest test_app.py -v
 ```
 
-#### Step C: Create Docker Volume for Persistent Data
+#### Step D: Create Docker Volume for Persistent Data
 ```bash
 docker volume create eventboard_data
 docker volume ls
 docker volume inspect eventboard_data
 ```
 
-#### Step D: Run the Container with Volume Persistence
+#### Step E: Run Container with Volume Persistence
 ```bash
 docker run -d \
   --name campus-event-ansible \
@@ -139,7 +189,50 @@ Access application at: [http://localhost:5001](http://localhost:5001)
 
 ---
 
-### 3. Automated Ansible Deployment
+### 4. Jenkins CI/CD Pipeline Setup & Execution
+
+#### Step A: Spin Up Local Jenkins with Docker Socket Mount
+```bash
+docker run -d --name local-jenkins \
+  --restart unless-stopped \
+  -p 9091:8080 -p 50000:50000 \
+  -v jenkins_home:/var/jenkins_home \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  jenkins/jenkins:lts
+```
+
+> **Docker-in-Jenkins Note**: Ensure the Docker CLI is installed in the container and permissions are granted on `/var/run/docker.sock`:
+> ```bash
+> docker exec -u 0 local-jenkins chmod 666 /var/run/docker.sock
+> ```
+
+#### Step B: Access Jenkins UI
+1. Navigate to: **[http://localhost:9091](http://localhost:9091)**
+2. Retrieve initial admin password:
+   ```bash
+   docker exec local-jenkins cat /var/jenkins_home/secrets/initialAdminPassword
+   ```
+
+#### Step C: Configure Pipeline Job
+1. Click **New Item** $\rightarrow$ Enter `campus board` $\rightarrow$ Select **Pipeline** $\rightarrow$ Click **OK**.
+2. Under the **Pipeline** configuration section:
+   - **Definition**: `Pipeline script from SCM`
+   - **SCM**: `Git`
+   - **Repository URL**: `https://github.com/AKIILESH/campus-event-board.git`
+   - **Branch Specifier**: `*/main`
+   - **Script Path**: `Jenkinsfile`
+3. Click **Save**.
+
+#### Step D: Trigger Pipeline Build
+Click **Build Now** to execute all 5 automated stages defined in [`Jenkinsfile`](Jenkinsfile):
+```
+[1. Checkout SCM] ➔ [2. Build Docker Image] ➔ [3. Run Pytest Tests] ➔ [4. Deploy with Ansible] ➔ [5. Verify Health]
+```
+View console outputs and test logs by clicking the build number $\rightarrow$ **Console Output**.
+
+---
+
+### 5. Automated Ansible Deployment
 
 Run the Ansible playbook directly or inside your designated Ansible control container:
 ```bash
@@ -152,7 +245,7 @@ docker exec ansible-docker-lab ansible-playbook -i /inventory.ini /docker-deploy
 
 ---
 
-### 4. Database Verification Commands
+### 6. Container Database Verification Commands
 
 Execute SQLite commands directly inside the running container:
 ```bash

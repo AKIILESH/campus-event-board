@@ -1,0 +1,1871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>23IT723 - DevOps Laboratory Project Report | Campus Event Board</title>
+<style>
+  @page {
+    size: A4 portrait;
+    margin: 12mm 14mm 12mm 14mm;
+  }
+
+  * {
+    box-sizing: border-box;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  body {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 11pt;
+    line-height: 1.35;
+    color: #111;
+    background-color: #f3f4f6;
+    margin: 0;
+    padding: 20px 0;
+  }
+
+  .page {
+    background: #fff;
+    width: 210mm;
+    min-height: 297mm;
+    height: 297mm;
+    margin: 0 auto 20px auto;
+    padding: 14mm 16mm 14mm 16mm;
+    position: relative;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    page-break-after: always;
+    page-break-inside: avoid;
+    overflow: hidden;
+  }
+
+  @media print {
+    body {
+      background: none;
+      padding: 0;
+    }
+    .page {
+      margin: 0;
+      box-shadow: none;
+      height: 297mm;
+      max-height: 297mm;
+    }
+  }
+
+  /* Page Border Frame */
+  .page-frame {
+    border: 1.2px solid #222;
+    height: 100%;
+    padding: 12mm 14mm 10mm 14mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+  }
+
+  /* Running Header & Footer */
+  .header-running {
+    display: flex;
+    justify-content: space-between;
+    font-size: 9pt;
+    font-style: italic;
+    color: #333;
+    border-bottom: 0.5px solid #aaa;
+    padding-bottom: 4px;
+    margin-bottom: 12px;
+  }
+
+  .footer-running {
+    display: flex;
+    justify-content: space-between;
+    font-size: 9pt;
+    color: #333;
+    border-top: 0.5px solid #aaa;
+    padding-top: 4px;
+    margin-top: auto;
+  }
+
+  .content-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Headings */
+  h1, h2, h3, h4 {
+    margin: 0 0 8px 0;
+    font-weight: bold;
+    color: #000;
+  }
+
+  h1.doc-title {
+    font-size: 15pt;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+
+  h2.section-title {
+    font-size: 13pt;
+    text-align: center;
+    margin: 10px 0 12px 0;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+
+  h3.module-title {
+    font-size: 11.5pt;
+    text-transform: uppercase;
+    margin: 10px 0 6px 0;
+    font-weight: bold;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 2px;
+  }
+
+  h4.sub-title {
+    font-size: 10.5pt;
+    margin: 8px 0 4px 0;
+    font-weight: bold;
+  }
+
+  p {
+    margin: 0 0 8px 0;
+    text-align: justify;
+    text-justify: inter-word;
+  }
+
+  ul {
+    margin: 4px 0 8px 18px;
+    padding: 0;
+  }
+
+  li {
+    margin-bottom: 3.5px;
+    text-align: justify;
+  }
+
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 6px 0 10px 0;
+    font-size: 9.5pt;
+  }
+
+  th, td {
+    border: 1px solid #333;
+    padding: 5px 7px;
+    vertical-align: top;
+  }
+
+  th {
+    background-color: #f0f0f0;
+    text-align: center;
+    font-weight: bold;
+  }
+
+  td.center {
+    text-align: center;
+  }
+
+  /* Code & Terminal Blocks */
+  .terminal-box {
+    background-color: #0d1117;
+    color: #c9d1d9;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 8.2pt;
+    line-height: 1.25;
+    padding: 7px 10px;
+    border-radius: 3px;
+    margin: 5px 0 8px 0;
+    white-space: pre-wrap;
+    word-break: break-all;
+    border: 1px solid #30363d;
+  }
+
+  .cmd-name {
+    font-weight: bold;
+    color: #000;
+    margin-top: 6px;
+    margin-bottom: 2px;
+    font-size: 10pt;
+  }
+
+  .cmd-code {
+    background-color: #f4f4f4;
+    border-left: 3px solid #444;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 8.8pt;
+    padding: 3px 8px;
+    margin: 2px 0 6px 0;
+    color: #111;
+  }
+
+  /* Image Placeholder Box */
+  .image-container {
+    margin: 6px auto 8px auto;
+    width: 100%;
+    text-align: center;
+  }
+
+  .image-placeholder {
+    width: 100%;
+    height: 165px;
+    border: 1.5px dashed #666;
+    background-color: #fafbfc;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #555;
+    font-size: 9pt;
+    padding: 10px;
+    position: relative;
+    border-radius: 4px;
+  }
+
+  .image-placeholder.tall {
+    height: 215px;
+  }
+
+  .image-placeholder.short {
+    height: 120px;
+  }
+
+  .image-placeholder .icon {
+    font-size: 20pt;
+    margin-bottom: 4px;
+    color: #777;
+  }
+
+  .image-placeholder .caption-hint {
+    font-size: 8pt;
+    color: #888;
+    margin-top: 4px;
+  }
+
+  .figure-caption {
+    font-weight: bold;
+    font-size: 9.5pt;
+    text-align: center;
+    margin-top: 4px;
+    margin-bottom: 6px;
+  }
+
+  /* Cover Page Specific */
+  .cover-center {
+    text-align: center;
+    margin-top: 15px;
+  }
+
+  .cover-emblem {
+    width: 130px;
+    height: 130px;
+    margin: 25px auto;
+  }
+
+  .cover-meta {
+    margin-top: 45px;
+    text-align: right;
+    font-size: 11pt;
+  }
+
+  .cover-meta .name {
+    font-weight: bold;
+    margin-top: 6px;
+  }
+
+  /* Status Badges in Text */
+  .badge-pass {
+    background: #e6f4ea;
+    color: #137333;
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-weight: bold;
+    font-size: 9pt;
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= PAGE 1: COVER PAGE ================= -->
+<div class="page" id="page-1">
+  <div class="page-frame">
+    <div class="header-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>1</span>
+    </div>
+
+    <div class="content-area" style="justify-content: space-between; text-align: center;">
+      <div style="margin-top: 30px;">
+        <h1 class="doc-title" style="font-size: 16pt; margin-bottom: 6px;">COIMBATORE INSTITUTE OF TECHNOLOGY</h1>
+        <p style="text-align: center; font-style: italic; font-size: 11pt; margin-bottom: 30px;">
+          (Government Aided Autonomous Institution Affiliated to Anna University)
+        </p>
+
+        <h2 style="font-size: 13.5pt; margin-bottom: 8px;">23IT723 - DEVOPS LABORATORY</h2>
+        <h2 style="font-size: 13.5pt; margin-bottom: 18px;">PROJECT</h2>
+
+        <h1 style="font-size: 20pt; text-decoration: underline; margin-bottom: 25px; letter-spacing: 0.5px;">
+          CAMPUS EVENT BOARD
+        </h1>
+      </div>
+
+      <!-- CIT Emblem SVG Seal -->
+      <div class="cover-emblem">
+        <svg viewBox="0 0 200 200" width="130" height="130" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="100" cy="100" r="94" fill="#fff" stroke="#8b0000" stroke-width="5"/>
+          <circle cx="100" cy="100" r="82" fill="#0d2b45" stroke="#ffb703" stroke-width="3"/>
+          <circle cx="100" cy="100" r="58" fill="#fff" stroke="#ffb703" stroke-width="2"/>
+          <!-- Inner Symbol / Lamp -->
+          <path d="M75,120 Q100,135 125,120 L120,105 Q100,115 80,105 Z" fill="#8b0000"/>
+          <path d="M95,103 Q100,80 100,70 Q105,80 105,103 Z" fill="#ffb703"/>
+          <circle cx="100" cy="65" r="4" fill="#d90429"/>
+          <!-- Seal Circular Text Path -->
+          <path id="curve" d="M 30,100 A 70,70 0 1,1 170,100" fill="none"/>
+          <text font-family="'Times New Roman', serif" font-size="11.5" font-weight="bold" fill="#ffffff" letter-spacing="1">
+            <textPath href="#curve" startOffset="50%" text-anchor="middle">
+              COIMBATORE INSTITUTE OF TECHNOLOGY
+            </textPath>
+          </text>
+        </svg>
+      </div>
+
+      <div>
+        <h3 style="font-size: 12pt; margin-bottom: 35px;">OCTOBER 2026</h3>
+
+        <div style="text-align: right; margin-right: 20px; margin-bottom: 20px;">
+          <p style="font-style: italic; margin-bottom: 4px;">Submitted by</p>
+          <p style="font-weight: bold; font-size: 12pt; margin: 0;">2303717620522022 &nbsp; JAYASREE R</p>
+          <p style="font-size: 10pt; color: #444; margin-top: 3px;">Department of Information Technology</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>1</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ================= PAGE 2: BONAFIDE CERTIFICATE ================= -->
+<div class="page" id="page-2">
+  <div class="page-frame">
+    <div class="header-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>2</span>
+    </div>
+
+    <div class="content-area">
+      <div style="text-align: center; margin-top: 25px; margin-bottom: 25px;">
+        <h1 class="doc-title" style="font-size: 14pt;">COIMBATORE INSTITUTE OF TECHNOLOGY</h1>
+        <p style="text-align: center; font-style: italic; font-size: 10.5pt; margin-bottom: 25px;">
+          (Government Aided Autonomous Institution Affiliated to Anna University)
+        </p>
+
+        <h2 style="font-size: 14pt; letter-spacing: 0.8px; text-decoration: underline;">
+          BONAFIDE CERTIFICATE
+        </h2>
+      </div>
+
+      <div style="font-size: 11pt; line-height: 1.6; margin: 25px 0 35px 0;">
+        <p style="text-indent: 40px; margin-bottom: 20px;">
+          Certified that this project report titled <strong>“CAMPUS EVENT BOARD”</strong> is the bonafide work of 
+          <strong>2303717620522022 - JAYASREE R</strong> completed during the academic year 
+          <strong>2025-2026 - Semester VII</strong> for the project presentation of 
+          <strong>23IT723 - DEVOPS LABORATORY</strong> under our supervision.
+        </p>
+
+        <p style="font-style: italic; text-indent: 40px; margin-bottom: 60px;">
+          Certified that the candidate was examined by using the project work examination.
+        </p>
+      </div>
+
+      <div style="margin-top: 40px;">
+        <h4 style="font-size: 11.5pt; margin-bottom: 12px;">Review Members:</h4>
+        <div style="margin-left: 20px; font-size: 11pt; line-height: 1.8;">
+          <p style="margin: 0;"><strong>1. &nbsp; Dr. M. Sangeetha</strong></p>
+          <p style="margin: 0;"><strong>2. &nbsp; Dr. E. Arul</strong></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>2</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ================= PAGE 3: EVALUATION SCHEME ================= -->
+<div class="page" id="page-3">
+  <div class="page-frame">
+    <div class="header-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>3</span>
+    </div>
+
+    <div class="content-area">
+      <div style="text-align: center; margin-bottom: 10px;">
+        <h2 style="font-size: 12.5pt; margin: 0;">23IT723 – DEVOPS LABORATORY</h2>
+        <h2 style="font-size: 12pt; margin: 2px 0;">FINAL MINI PROJECT – EVALUATION SCHEME</h2>
+        <h4 style="font-size: 10.5pt; margin: 4px 0;">Final Mini Project Assessment</h4>
+      </div>
+
+      <p style="font-size: 9.5pt; margin-bottom: 8px;">
+        The final mini project shall require students to integrate the major DevOps practices covered in the laboratory. 
+        The project should demonstrate practical implementation of version control, collaborative development, Continuous Integration, 
+        containerization and/or automated configuration/provisioning, with proper execution evidence.
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 7%;">S.No.</th>
+            <th style="width: 28%;">Evaluation Component</th>
+            <th style="width: 53%;">Key Verification Points</th>
+            <th style="width: 12%;">Marks</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="center">1</td>
+            <td><strong>Problem Definition &amp; Project Planning</strong></td>
+            <td>Problem statement, objectives, requirements, scope, module identification, technology selection and workflow planning.</td>
+            <td class="center">10</td>
+          </tr>
+          <tr>
+            <td class="center">2</td>
+            <td><strong>Git Repository &amp; Version Control</strong></td>
+            <td>Repository creation, meaningful commits, README, .gitignore, remote repository, push/pull/fetch operations and commit history.</td>
+            <td class="center">15</td>
+          </tr>
+          <tr>
+            <td class="center">3</td>
+            <td><strong>Branching, Merging &amp; Collaboration</strong></td>
+            <td>Feature branches, parallel development, merging, conflict handling, branch organization and collaborative workflow.</td>
+            <td class="center">10</td>
+          </tr>
+          <tr>
+            <td class="center">4</td>
+            <td><strong>Application Development &amp; Build</strong></td>
+            <td>Working application/source code, project structure, dependency management, build configuration and successful execution.</td>
+            <td class="center">15</td>
+          </tr>
+          <tr>
+            <td class="center">5</td>
+            <td><strong>Jenkins Continuous Integration</strong></td>
+            <td>Jenkins configuration, source-code integration, automated checkout, build job/pipeline, build execution and console verification.</td>
+            <td class="center">15</td>
+          </tr>
+          <tr>
+            <td class="center">6</td>
+            <td><strong>Docker / Containerization</strong></td>
+            <td>Dockerfile, image creation, container execution, port/configuration handling, application deployment and container verification.</td>
+            <td class="center">10</td>
+          </tr>
+          <tr>
+            <td class="center">7</td>
+            <td><strong>Automation / Configuration Management</strong></td>
+            <td>Ansible/Chef/Puppet/SaltStack or equivalent automation where applicable; repeatable configuration/provisioning and successful execution.</td>
+            <td class="center">5</td>
+          </tr>
+          <tr>
+            <td class="center">8</td>
+            <td><strong>Testing &amp; Verification</strong></td>
+            <td>Functional testing, build verification, error identification, test evidence and corrective action.</td>
+            <td class="center">5</td>
+          </tr>
+          <tr>
+            <td class="center">9</td>
+            <td><strong>Documentation &amp; Technical Presentation</strong></td>
+            <td>Architecture/workflow diagram, commands/configuration, screenshots, results, troubleshooting, conclusion and repository details.</td>
+            <td class="center">5</td>
+          </tr>
+          <tr>
+            <td class="center">10</td>
+            <td><strong>Final Demonstration &amp; Viva-Voce</strong></td>
+            <td>Live demonstration, explanation of implementation, troubleshooting responses and technical understanding.</td>
+            <td class="center">10</td>
+          </tr>
+          <tr style="font-weight: bold; background-color: #f8f9fa;">
+            <td colspan="3" style="text-align: right; padding-right: 15px;">TOTAL</td>
+            <td class="center">100</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="footer-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>3</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ================= PAGE 4: MARK SPLIT & FACULTY RECORD ================= -->
+<div class="page" id="page-4">
+  <div class="page-frame">
+    <div class="header-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>4</span>
+    </div>
+
+    <div class="content-area">
+      <h3 style="text-align: center; font-size: 11pt; margin-bottom: 6px;">
+        Recommended Mark Distribution within the Final Demonstration
+      </h3>
+      <p style="font-size: 9pt; margin-bottom: 6px;">
+        For uniform evaluation, the examiner may use the following internal split for the implementation and demonstration components.
+      </p>
+
+      <table style="font-size: 9pt;">
+        <thead>
+          <tr>
+            <th style="width: 45%;">Assessment Area</th>
+            <th style="width: 15%;">Marks</th>
+            <th style="width: 20%;">Awarded Marks</th>
+            <th style="width: 20%;">Remarks</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Working implementation and correctness</td><td class="center">30</td><td></td><td></td></tr>
+          <tr><td>DevOps tool integration and automation</td><td class="center">20</td><td></td><td></td></tr>
+          <tr><td>Version control and collaborative workflow</td><td class="center">15</td><td></td><td></td></tr>
+          <tr><td>Build / deployment / container verification</td><td class="center">15</td><td></td><td></td></tr>
+          <tr><td>Testing and troubleshooting</td><td class="center">5</td><td></td><td></td></tr>
+          <tr><td>Documentation and technical presentation</td><td class="center">5</td><td></td><td></td></tr>
+          <tr><td>Live demonstration and viva-voce</td><td class="center">10</td><td></td><td></td></tr>
+          <tr style="font-weight: bold; background: #f0f0f0;"><td class="center">TOTAL</td><td class="center">100</td><td></td><td></td></tr>
+        </tbody>
+      </table>
+
+      <h4 style="font-size: 9.8pt; margin: 6px 0 3px 0;">Minimum Evidence to be Submitted</h4>
+      <ul style="font-size: 8.8pt; margin: 2px 0 6px 16px;">
+        <li>Project repository URL and project README.</li>
+        <li>Git commit history and branch/merge evidence.</li>
+        <li>Jenkins job/pipeline configuration and successful build evidence.</li>
+        <li>Dockerfile, image and running container evidence where Docker is used.</li>
+        <li>Automation/configuration scripts where applicable.</li>
+        <li>Application execution and testing evidence.</li>
+        <li>Architecture/workflow diagram.</li>
+        <li>Short technical report containing implementation steps, results and troubleshooting.</li>
+        <li>Live demonstration of the complete DevOps workflow.</li>
+      </ul>
+
+      <h4 style="font-size: 9.8pt; margin: 4px 0 2px 0;">Evaluation Guidelines</h4>
+      <ul style="font-size: 8.5pt; margin: 2px 0 6px 16px;">
+        <li>Marks shall be awarded primarily for a working implementation and demonstrable output.</li>
+        <li>Copied source code without functional understanding shall not receive full marks.</li>
+        <li>Screenshots may support the evaluation, but critical components should be demonstrated live wherever possible.</li>
+        <li>Students should use meaningful repository names, branch names and commit messages.</li>
+        <li>The final viva shall focus on the student's own implementation, commands used, tool configuration and troubleshooting.</li>
+      </ul>
+
+      <h4 style="font-size: 10pt; text-align: center; margin: 6px 0 4px 0;">Faculty Evaluation Record</h4>
+      <table style="font-size: 9pt; margin-bottom: 0;">
+        <tr><td style="width: 25%;"><strong>Student Name</strong></td><td style="width: 25%;">JAYASREE R</td><td style="width: 25%;"><strong>Register No.</strong></td><td style="width: 25%;">2303717620522022</td></tr>
+        <tr><td><strong>Project Title</strong></td><td colspan="3">CAMPUS EVENT BOARD</td></tr>
+        <tr><td><strong>Final Mark</strong></td><td></td><td><strong>Date</strong></td><td></td></tr>
+        <tr><td><strong>Faculty Evaluator I</strong></td><td></td><td><strong>Signature</strong></td><td></td></tr>
+        <tr><td><strong>Faculty Evaluator II</strong></td><td>&nbsp; / 100</td><td><strong>Signature</strong></td><td></td></tr>
+      </table>
+    </div>
+
+    <div class="footer-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>4</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ================= PAGE 5: TABLE OF CONTENTS (PART 1) ================= -->
+<div class="page" id="page-5">
+  <div class="page-frame">
+    <div class="header-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>5</span>
+    </div>
+
+    <div class="content-area">
+      <h2 class="section-title">TABLE OF CONTENTS</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 12%;">S. NO.</th>
+            <th style="width: 73%; text-align: left; padding-left: 12px;">CONTENT</th>
+            <th style="width: 15%;">PAGE NO.</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="center">1</td><td>INTRODUCTION</td><td class="center">07</td></tr>
+          <tr><td class="center">2</td><td>OBJECTIVES</td><td class="center">07</td></tr>
+          <tr><td class="center">3</td><td>ABSTRACT</td><td class="center">08</td></tr>
+          <tr><td class="center">4</td><td>TECHNOLOGY STACK</td><td class="center">08</td></tr>
+          <tr><td class="center">5</td><td>SYSTEM ARCHITECTURE</td><td class="center">09</td></tr>
+          <tr><td class="center">6</td><td>MODULE 1 — USER INTERFACE &amp; EVENT DISCOVERY</td><td class="center">10</td></tr>
+          <tr><td class="center">7</td><td>MODULE 2 — FLASK BACKEND &amp; REGISTRATION MANAGEMENT</td><td class="center">11</td></tr>
+          <tr><td class="center">8</td><td>MODULE 3 — SQLITE DATABASE MANAGEMENT</td><td class="center">12</td></tr>
+          <tr><td class="center">9</td><td>MODULE 4 — GIT &amp; GITHUB SOURCE CONTROL</td><td class="center">14</td></tr>
+          <tr><td class="center">10</td><td>MODULE 5 — DOCKER CONTAINERIZATION</td><td class="center">15</td></tr>
+          <tr><td class="center">11</td><td>MODULE 6 — JENKINS CI/CD PIPELINE</td><td class="center">17</td></tr>
+          <tr><td class="center">12</td><td>MODULE 7 — AUTOMATED TESTING</td><td class="center">18</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="footer-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>5</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ================= PAGE 6: TABLE OF CONTENTS (PART 2) ================= -->
+<div class="page" id="page-6">
+  <div class="page-frame">
+    <div class="header-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>6</span>
+    </div>
+
+    <div class="content-area">
+      <h2 class="section-title" style="visibility: hidden;">TABLE OF CONTENTS (CONT)</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 12%;">S. NO.</th>
+            <th style="width: 73%; text-align: left; padding-left: 12px;">CONTENT</th>
+            <th style="width: 15%;">PAGE NO.</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="center">13</td><td>MODULE 8 — ANSIBLE DEPLOYMENT</td><td class="center">20</td></tr>
+          <tr><td class="center">14</td><td>MODULE 9 — PERSISTENT STORAGE</td><td class="center">21</td></tr>
+          <tr><td class="center">15</td><td>MODULE 10 — ADMIN &amp; EVENT MANAGEMENT</td><td class="center">22</td></tr>
+          <tr><td class="center">16</td><td>MODULE 11 — CI/CD INTEGRATION</td><td class="center">23</td></tr>
+          <tr><td class="center">17</td><td>MODULE 12 — APPLICATION &amp; DEPLOYMENT VERIFICATION</td><td class="center">24</td></tr>
+          <tr><td class="center">18</td><td>RESULTS AND OUTPUT</td><td class="center">26</td></tr>
+          <tr><td class="center">19</td><td>COMMANDS USED</td><td class="center">26</td></tr>
+          <tr><td class="center">20</td><td>ADVANTAGES</td><td class="center">31</td></tr>
+          <tr><td class="center">21</td><td>LIMITATIONS</td><td class="center">31</td></tr>
+          <tr><td class="center">22</td><td>FUTURE ENHANCEMENTS</td><td class="center">32</td></tr>
+          <tr><td class="center">23</td><td>CONCLUSION</td><td class="center">32</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="footer-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>6</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ================= PAGE 7: INTRODUCTION & OBJECTIVES ================= -->
+<div class="page" id="page-7">
+  <div class="page-frame">
+    <div class="header-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>7</span>
+    </div>
+
+    <div class="content-area">
+      <h2 class="section-title">1. INTRODUCTION</h2>
+      <p>
+        The <strong>Campus Event Board</strong> is a comprehensive web-based event discovery and registration platform designed to simplify the publication, tracking, and student enrollment processes for university activities. Across large collegiate campuses, traditional methods of circulating notices through bulletin boards, social messaging groups, or paper sign-up sheets lead to information silos, quota mismanagement, missed registration deadlines, and manual clerical effort.
+      </p>
+      <p>
+        The developed system allows students to browse upcoming departmental events, filter activities across specialized categories (Hackathons, Workshops, Cultural, Technical, Sports, and Seminars), check live seating capacity counters, and instantly register with unique generated digital ticket passes (<code>CIT-EVT-XXXXXX</code>). An administrative dashboard is also provided for faculty coordinators to manage event statuses, alter attendee quotas, and inspect registration rosters.
+      </p>
+      <p>
+        The application is engineered using HTML5, CSS3, JavaScript, Python 3.11, Flask, and SQLite. To fulfill the DevOps Laboratory syllabus objectives, the software incorporates end-to-end automation across the delivery lifecycle. Git and GitHub govern version control. Jenkins automates the multi-stage CI/CD pipeline. Docker packages the application into the <code>campus-event-ci</code> image. Pytest conducts automated test verification. Ansible orchestrates container deployment on port 5001. A Docker Volume named <code>eventboard_data</code> is mounted to ensure persistent SQLite database storage.
+      </p>
+
+      <h2 class="section-title" style="margin-top: 14px;">2. OBJECTIVES</h2>
+      <ul>
+        <li>To develop a responsive event discovery platform that enables students to browse, search, and register for campus activities conveniently.</li>
+        <li>To implement dynamic capacity tracking and instant cryptographic pass generation (<code>CIT-EVT-XXXXXX</code>) with duplicate prevention.</li>
+        <li>To create an administrative management portal for monitoring event attendance, quota statuses, and attendee listings.</li>
+        <li>To implement DevOps best practices throughout the application lifecycle using Git, GitHub, and Jenkins.</li>
+        <li>To automate Continuous Integration (CI) using Jenkins pipelines that automatically fetch source code, build Docker images, and execute unit tests.</li>
+        <li>To containerize the application using Docker to guarantee execution consistency across developer and production environments.</li>
+        <li>To integrate Pytest into the automated pipeline to enforce quality gates prior to container release.</li>
+        <li>To automate application container provisioning and configuration using Ansible playbooks.</li>
+        <li>To configure Docker Volume persistence (<code>eventboard_data</code>) to ensure attendee records survive container upgrades and restarts.</li>
+      </ul>
+    </div>
+
+    <div class="footer-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>7</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ================= PAGE 8: ABSTRACT & TECH STACK ================= -->
+<div class="page" id="page-8">
+  <div class="page-frame">
+    <div class="header-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>8</span>
+    </div>
+
+    <div class="content-area">
+      <h2 class="section-title">3. ABSTRACT</h2>
+      <p>
+        The <strong>Campus Event Board</strong> is an end-to-end digital solution designed to modernize how collegiate events, hackathons, and symposiums are published and attended. Traditional campus operations suffer from scattered notices, manual registration rosters, and lack of real-time seat quota visibility. The proposed web system provides an intuitive interface where students discover events, filter by departmental domain, search keywords, and receive verifiable digital passes.
+      </p>
+      <p>
+        The application is powered by a Python Flask microservice backend backed by SQLite relational storage. To satisfy modern cloud-native engineering standards, the project implements a complete DevOps automation toolchain. Git and GitHub manage version control and branch merging. Jenkins automates the Continuous Integration pipeline. Docker containerizes the application into portable images, Pytest runs automated endpoint assertions, and Ansible configures automated container deployment. Persistent data storage is guaranteed through a dedicated Docker Volume named <code>eventboard_data</code> mounted at <code>/app/data</code>. The complete end-to-end delivery workflow follows:
+      </p>
+      <p style="text-align: center; font-weight: bold; margin: 6px 0;">
+        GitHub &rarr; Jenkins CI &rarr; Docker Build &rarr; Pytest Suite &rarr; Ansible Deploy &rarr; Docker Container (:5001) &rarr; SQLite Volume Persistence
+      </p>
+
+      <h2 class="section-title" style="margin-top: 12px;">4. TECHNOLOGY STACK</h2>
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 25%;">Technology</th>
+            <th style="width: 20%;">Version</th>
+            <th style="width: 55%;">Purpose in Project</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>HTML5 / CSS3</td><td>Modern Standards</td><td>Responsive web layout, dark theme, glassmorphic cards</td></tr>
+          <tr><td>JavaScript</td><td>ES6+</td><td>Real-time category filtering, RSVP modal logic, pass download</td></tr>
+          <tr><td>Python</td><td>3.11 / 3.14</td><td>Backend programming language</td></tr>
+          <tr><td>Flask</td><td>3.1.x</td><td>Lightweight backend web and REST API framework</td></tr>
+          <tr><td>SQLite</td><td>3.x</td><td>Embedded relational database engine</td></tr>
+          <tr><td>Git / GitHub</td><td>2.x</td><td>Distributed version control and source code repository</td></tr>
+          <tr><td>Jenkins</td><td>2.580.x</td><td>CI/CD automation server orchestrating build, test &amp; deploy</td></tr>
+          <tr><td>Docker</td><td>27.x / 28.x</td><td>Application containerization and portable packaging</td></tr>
+          <tr><td>Pytest</td><td>8.x / 9.x</td><td>Automated functional endpoint and unit testing suite</td></tr>
+          <tr><td>Ansible</td><td>2.10+</td><td>Automated deployment and container orchestration</td></tr>
+          <tr><td>Docker Volume</td><td><code>eventboard_data</code></td><td>Persistent database storage mounted at <code>/app/data</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="footer-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>8</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ================= PAGE 9: SYSTEM ARCHITECTURE ================= -->
+<div class="page" id="page-9">
+  <div class="page-frame">
+    <div class="header-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>9</span>
+    </div>
+
+    <div class="content-area">
+      <h2 class="section-title">5. SYSTEM ARCHITECTURE</h2>
+
+      <div class="image-container">
+        <div class="image-placeholder tall">
+          <div class="icon">&#128444;</div>
+          <strong>[ Figure 5.1: Campus Event Board End-to-End DevOps Architecture Diagram ]</strong>
+          <span class="caption-hint">Upload architecture diagram here (showing Developer &rarr; GitHub &rarr; Jenkins :9091 &rarr; Docker Build &rarr; Pytest &rarr; Ansible &rarr; Container :5001 &rarr; SQLite Volume)</span>
+        </div>
+        <div class="figure-caption">Figure 5.1: Campus Event Board System Architecture Diagram</div>
+      </div>
+
+      <ol style="margin: 4px 0 0 20px; font-size: 9.6pt; line-height: 1.35;">
+        <li><strong>Development:</strong> Developers create and update the Flask application, HTML templates, CSS styles, and database models locally.</li>
+        <li><strong>Source Code Management:</strong> Git tracks incremental code commits, feature branches, and configuration files locally.</li>
+        <li><strong>GitHub Repository:</strong> Code changes are pushed to GitHub (<code>https://github.com/AKIILESH/campus-event-board.git</code>) for centralized collaboration.</li>
+        <li><strong>Jenkins Trigger:</strong> Jenkins SCM integration detects changes on the <code>main</code> branch and launches the multi-stage declarative pipeline.</li>
+        <li><strong>Docker Build:</strong> Jenkins compiles the application into Docker image <code>campus-event-ci</code> using the project Dockerfile.</li>
+        <li><strong>Automated Testing:</strong> Pytest runs inside the built container image to validate health, REST endpoints, and registration constraints.</li>
+        <li><strong>Deployment Automation:</strong> Upon test passage, Jenkins executes the Ansible playbook (<code>docker-deploy.yml</code>) to provision the target container.</li>
+      </ol>
+    </div>
+
+    <div class="footer-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>9</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ================= PAGE 10: ARCHITECTURE CONT & MODULE 1 ================= -->
+<div class="page" id="page-10">
+  <div class="page-frame">
+    <div class="header-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>10</span>
+    </div>
+
+    <div class="content-area">
+      <ol start="8" style="margin: 0 0 10px 20px; font-size: 9.6pt; line-height: 1.35;">
+        <li><strong>Container Configuration:</strong> Ansible configures container <code>campus-event-ansible</code> with port mapping <code>5001:5000</code>, restart policy <code>unless-stopped</code>, and persistent volume mounting.</li>
+        <li><strong>Application Execution:</strong> The containerized Flask server executes the web portal, serving responsive templates and JSON REST endpoints.</li>
+        <li><strong>User Interaction:</strong> Students search events, filter categories, view live seat capacity bars, and register to receive unique digital passes.</li>
+        <li><strong>Admin Management:</strong> Administrators inspect live attendee lists, modify seating quotas, and export rosters via <code>/admin</code>.</li>
+      </ol>
+
+      <h3 class="module-title">MODULE 1 — USER INTERFACE &amp; EVENT DISCOVERY</h3>
+      <p>
+        This module delivers the responsive student-facing portal for the Campus Event Board application. It provides an intuitive, high-contrast dark theme designed to maximize visibility and ease of access across desktop and mobile browsers.
+      </p>
+
+      <h4 class="sub-title">Main Features:</h4>
+      <ul>
+        <li>Displays upcoming campus events with category badges (Hackathon, Workshop, Cultural, Technical, Sports, Seminar).</li>
+        <li>Provides a live instant search bar to filter events by keywords in title, description, or venue.</li>
+        <li>Presents interactive category filter pills with instant DOM updates without full page reload.</li>
+        <li>Visual capacity progress indicator displaying registered seats versus total quota with status tags (<em>Open</em> / <em>Closed</em>).</li>
+        <li>One-click modal popup enabling students to input registration credentials (Name, Roll No, Department, Year, Email, Phone).</li>
+        <li>Generates an instant cryptographic digital event pass with ticket code (<code>CIT-EVT-XXXXXX</code>) and print/save option.</li>
+        <li>Responsive CSS Grid layout adapting seamlessly across mobile phones, tablets, and wide monitors.</li>
+        <li>Connects with Flask REST APIs asynchronously using the JavaScript Fetch API.</li>
+      </ul>
+      <p style="margin-top: 4px;"><strong>Technologies:</strong> HTML5, CSS3 (Vanilla Glassmorphic Design), Vanilla JavaScript (ES6+).</p>
+    </div>
+
+    <div class="footer-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>10</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ================= PAGE 11: UI SCREENSHOTS & MODULE 2 ================= -->
+<div class="page" id="page-11">
+  <div class="page-frame">
+    <div class="header-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>11</span>
+    </div>
+
+    <div class="content-area">
+      <div class="image-container">
+        <div class="image-placeholder short">
+          <div class="icon">&#128444;</div>
+          <strong>[ Figure 7.1: Campus Event Board Home Page ]</strong>
+          <span class="caption-hint">Upload screenshot of Campus Event Board Portal (http://localhost:5001)</span>
+        </div>
+        <div class="figure-caption">Figure 7.1: Campus Event Board Home Page</div>
+      </div>
+
+      <div class="image-container">
+        <div class="image-placeholder short">
+          <div class="icon">&#128444;</div>
+          <strong>[ Figure 7.2: Event Registration Modal &amp; Digital Pass ]</strong>
+          <span class="caption-hint">Upload screenshot of RSVP Registration popup &amp; Generated Ticket Pass</span>
+        </div>
+        <div class="figure-caption">Figure 7.2: Event Registration Modal &amp; Generated Pass</div>
+      </div>
+
+      <h3 class="module-title">MODULE 2 — FLASK BACKEND &amp; REGISTRATION MANAGEMENT</h3>
+      <p>
+        This module encapsulates the server-side business logic and RESTful communication layer between frontend clients and SQLite storage. Flask handles request routing, payload validation, ticket code generation, and error handling.
+      </p>
+
+      <h4 class="sub-title">Main Functions:</h4>
+      <ul>
+        <li>Serves frontend templates via Jinja2 (<code>/</code> for student board, <code>/admin</code> for administration).</li>
+        <li>Provides <code>GET /api/events</code> endpoint supporting dynamic search and category filtering query parameters.</li>
+      </ul>
+    </div>
+
+    <div class="footer-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>11</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ================= PAGE 12: MODULE 2 CONT & MODULE 3 ================= -->
+<div class="page" id="page-12">
+  <div class="page-frame">
+    <div class="header-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>12</span>
+    </div>
+
+    <div class="content-area">
+      <ul>
+        <li>Provides <code>POST /api/register</code> endpoint to process registrations, enforce duplicate checks, and increment seat counts.</li>
+        <li>Generates unique ticket codes matching the pattern <code>CIT-EVT-XXXXXX</code> using cryptographic alphanumeric randomizers.</li>
+        <li>Rejects duplicate registrations for the same roll number in an event with HTTP 409 Conflict.</li>
+        <li>Provides administrative endpoints: <code>POST /api/admin/events</code>, <code>PATCH /api/admin/events/&lt;id&gt;/status</code>, and <code>GET /api/admin/registrations</code>.</li>
+        <li>Implements <code>GET /health</code> endpoint for Docker and Jenkins automated health verification.</li>
+        <li>Runs reliably inside Docker container environments using configurable environment variables (<code>PORT</code>, <code>DB_DIR</code>).</li>
+      </ul>
+      <p><strong>Technology:</strong> Python 3.11 with Flask 3.1.x framework.</p>
+
+      <div class="image-container">
+        <div class="image-placeholder short">
+          <div class="icon">&#128444;</div>
+          <strong>[ Figure 7.3: Flask Backend Implementation Code (app.py) ]</strong>
+          <span class="caption-hint">Upload screenshot of app.py code or IDE view</span>
+        </div>
+        <div class="figure-caption">Figure 7.3: Flask Backend Implementation</div>
+      </div>
+
+      <h3 class="module-title">MODULE 3 — SQLITE DATABASE MANAGEMENT</h3>
+      <p>
+        This module manages persistent relational storage for events and registrations. SQLite provides lightweight, zero-configuration database operations embedded within the Python runtime.
+      </p>
+
+      <h4 class="sub-title">Main Functions:</h4>
+      <ul>
+        <li>Automatically creates database schema on startup if not present (<code>init_db()</code>).</li>
+        <li>Seeds default department events across various categories upon first execution.</li>
+      </ul>
+    </div>
+
+    <div class="footer-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>12</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ================= PAGE 13: MODULE 3 CONT & MODULE 4 ================= -->
+<div class="page" id="page-13">
+  <div class="page-frame">
+    <div class="header-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>13</span>
+    </div>
+
+    <div class="content-area">
+      <ul>
+        <li>Maintains the <code>events</code> table tracking title, category, date, time, venue, capacity, registered count, and status.</li>
+        <li>Maintains the <code>registrations</code> table tracking unique ticket code, student name, roll number, department, year, email, and phone.</li>
+        <li>Enforces foreign key relationships linking registrations to their corresponding event ID.</li>
+        <li>Stores database file at <code>data/events.db</code> (mounted from Docker Volume <code>eventboard_data</code>).</li>
+        <li>Ensures complete data survival across container recreations, image updates, and host reboots.</li>
+      </ul>
+
+      <p style="margin-top: 6px;">
+        <strong>Database Location:</strong> <code>data/events.db</code><br>
+        <strong>Inside Docker Container:</strong> <code>/app/data/events.db</code><br>
+        <strong>Technology:</strong> SQLite 3.x with Python <code>sqlite3</code> driver.
+      </p>
+
+      <div class="image-container">
+        <div class="image-placeholder short">
+          <div class="icon">&#128444;</div>
+          <strong>[ Figure 7.4: SQLite Database Containing Events &amp; Registration Records ]</strong>
+          <span class="caption-hint">Upload screenshot of terminal query output from sqlite3 data/events.db</span>
+        </div>
+        <div class="figure-caption">Figure 7.4: SQLite Database Records</div>
+      </div>
+
+      <h3 class="module-title">MODULE 4 — GIT &amp; GITHUB SOURCE CONTROL</h3>
+      <p>
+        This module manages version history, branch merges, and collaborative code synchronization using Git and GitHub.
+      </p>
+    </div>
+
+    <div class="footer-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>13</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ================= PAGE 14: MODULE 4 CONT ================= -->
+<div class="page" id="page-14">
+  <div class="page-frame">
+    <div class="header-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>14</span>
+    </div>
+
+    <div class="content-area">
+      <h4 class="sub-title">Main Functions:</h4>
+      <ul>
+        <li>Initializes the project as a local Git repository with meaningful commit milestones.</li>
+        <li>Tracks code modifications, dependency additions, test cases, and deployment playbooks.</li>
+        <li>Provides branch isolation (<code>main</code> and feature branches) for safe collaborative development.</li>
+        <li>Pushes source code to remote GitHub repository: <code>https://github.com/AKIILESH/campus-event-board.git</code>.</li>
+        <li>Includes descriptive <code>.gitignore</code> excluding virtual environments, bytecodes, and temporary files.</li>
+        <li>Serves as the Single Source of Truth for Jenkins CI pipeline checkout triggers.</li>
+      </ul>
+
+      <h4 class="sub-title" style="margin-top: 15px;">Main Project Files:</h4>
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 30%;">File / Directory</th>
+            <th style="width: 70%;">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><code>app.py</code></td><td>Core Flask backend application, REST APIs, and database models</td></tr>
+          <tr><td><code>Dockerfile</code></td><td>Multi-stage container definition based on Python 3.11-slim</td></tr>
+          <tr><td><code>Jenkinsfile</code></td><td>Declarative CI/CD pipeline script orchestrating build, test, and deploy</td></tr>
+          <tr><td><code>test_app.py</code></td><td>Automated Pytest test suite covering endpoints and registration workflows</td></tr>
+          <tr><td><code>requirements.txt</code></td><td>Python dependencies (Flask, Pytest, Requests)</td></tr>
+          <tr><td><code>ansible/</code></td><td>Ansible playbook (<code>docker-deploy.yml</code>) and inventory (<code>inventory.ini</code>)</td></tr>
+          <tr><td><code>templates/</code> &amp; <code>static/</code></td><td>HTML web templates and CSS/JavaScript assets</td></tr>
+          <tr><td><code>.gitignore</code></td><td>Git ignore rules for virtual environments, caches, and database binaries</td></tr>
+        </tbody>
+      </table>
+
+      <p style="margin-top: 8px;"><strong>Technologies:</strong> Git CLI, GitHub remote repository.</p>
+    </div>
+
+    <div class="footer-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>14</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ================= PAGE 15: GITHUB SCREENSHOT & MODULE 5 ================= -->
+<div class="page" id="page-15">
+  <div class="page-frame">
+    <div class="header-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>15</span>
+    </div>
+
+    <div class="content-area">
+      <div class="image-container">
+        <div class="image-placeholder short">
+          <div class="icon">&#128444;</div>
+          <strong>[ Figure 7.5: Campus Event Board GitHub Repository ]</strong>
+          <span class="caption-hint">Upload screenshot of GitHub repository (https://github.com/AKIILESH/campus-event-board)</span>
+        </div>
+        <div class="figure-caption">Figure 7.5: Campus Event Board GitHub Repository</div>
+      </div>
+
+      <h3 class="module-title">MODULE 5 — DOCKER CONTAINERIZATION</h3>
+      <p>
+        Docker is used to package and execute the Campus Event Board application in an isolated, consistent, and portable container environment, eliminating environment discrepancies between developer machines and host servers.
+      </p>
+
+      <h4 class="sub-title">Main Functions:</h4>
+      <ul>
+        <li>Packages Python runtime, system libraries, and Flask dependencies into Docker image <code>campus-event-ci</code>.</li>
+        <li>Uses slim Debian base image (<code>python:3.11-slim</code>) for minimal footprint and reduced security vulnerabilities.</li>
+        <li>Configures system health checks checking <code>http://localhost:5000/health</code> every 30 seconds.</li>
+        <li>Defines persistent volume mount target at <code>/app/data</code> for database durability.</li>
+        <li>Exposes internal service port 5000 mapped to host port 5001.</li>
+      </ul>
+
+      <h4 class="sub-title">Docker Configuration:</h4>
+      <p style="margin: 2px 0;">
+        <strong>Docker Image:</strong> <code>campus-event-ci</code><br>
+        <strong>Container Name:</strong> <code>campus-event-ansible</code><br>
+        <strong>Base Image:</strong> <code>python:3.11-slim</code>
+      </p>
+    </div>
+
+    <div class="footer-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>15</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ================= PAGE 16: DOCKER FLOW DIAGRAM ================= -->
+<div class="page" id="page-16">
+  <div class="page-frame">
+    <div class="header-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>16</span>
+    </div>
+
+    <div class="content-area">
+      <p style="margin-bottom: 4px;">
+        <strong>Port Mapping:</strong> <code>5001 &rarr; 5000</code><br>
+        <strong>Host Access URL:</strong> <a href="http://localhost:5001">http://localhost:5001</a><br>
+        <strong>Technology:</strong> Docker 27.x / Docker Engine.
+      </p>
+
+      <h4 class="sub-title" style="margin-top: 10px;">Docker Flow:</h4>
+
+      <div class="image-container">
+        <div class="image-placeholder tall">
+          <div class="icon">&#128444;</div>
+          <strong>[ Figure 5.2: Docker Containerization Workflow ]</strong>
+          <span class="caption-hint">Upload Docker Flow diagram (Application Code &rarr; Dockerfile &rarr; Docker Image: campus-event-ci &rarr; Container: campus-event-ansible &rarr; Flask App on Port 5001)</span>
+        </div>
+        <div class="figure-caption">Figure 5.2: Docker Containerization Workflow</div>
+      </div>
+
+      <div style="font-size: 9.3pt; line-height: 1.35; margin-top: 6px;">
+        <p>
+          The workflow begins with application source files (<code>app.py</code>, templates, assets) copied into the container context. 
+          The <code>Dockerfile</code> installs dependencies, creates persistent mount points, and establishes healthcheck rules. 
+          The resulting immutable image <code>campus-event-ci</code> is instantiated into runtime container <code>campus-event-ansible</code>, 
+          mounting the volume <code>eventboard_data</code> to preserve attendee registrations.
+        </p>
+      </div>
+    </div>
+
+    <div class="footer-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>16</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ================= PAGE 17: DOCKER SCREENSHOTS & MODULE 6 ================= -->
+<div class="page" id="page-17">
+  <div class="page-frame">
+    <div class="header-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>17</span>
+    </div>
+
+    <div class="content-area">
+      <div class="image-container">
+        <div class="image-placeholder short">
+          <div class="icon">&#128444;</div>
+          <strong>[ Figure 7.6: Campus Event Board Docker Image (docker images) ]</strong>
+          <span class="caption-hint">Upload screenshot of terminal output showing `docker images` with campus-event-ci</span>
+        </div>
+        <div class="figure-caption">Figure 7.6: Campus Event Board Docker Image</div>
+      </div>
+
+      <div class="image-container">
+        <div class="image-placeholder short">
+          <div class="icon">&#128444;</div>
+          <strong>[ Figure 7.7: Running Docker Container (docker ps) ]</strong>
+          <span class="caption-hint">Upload screenshot of `docker ps` showing campus-event-ansible running on port 5001</span>
+        </div>
+        <div class="figure-caption">Figure 7.7: Running Docker Container</div>
+      </div>
+
+      <h3 class="module-title">MODULE 6 — JENKINS CI/CD PIPELINE</h3>
+      <p>
+        Jenkins is used to automate the Continuous Integration and Continuous Deployment lifecycle. It connects the GitHub source code repository with Docker compilation, automated test gates, and Ansible deployment orchestration.
+      </p>
+
+      <h4 class="sub-title">Main Functions:</h4>
+      <ul>
+        <li>Retrieves the latest commits from the GitHub <code>main</code> branch automatically.</li>
+        <li>Executes declarative multi-stage pipeline defined in <code>Jenkinsfile</code>.</li>
+        <li>Builds application Docker image <code>campus-event-ci</code>.</li>
+        <li>Triggers automated Pytest unit tests in an ephemeral container.</li>
+        <li>Prevents deployment if any test case fails, guaranteeing release reliability.</li>
+        <li>Invokes Ansible playbook for automated container provisioning.</li>
+      </ul>
+    </div>
+
+    <div class="footer-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>17</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ================= PAGE 18: JENKINS EXECUTION & MODULE 7 ================= -->
+<div class="page" id="page-18">
+  <div class="page-frame">
+    <div class="header-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>18</span>
+    </div>
+
+    <div class="content-area">
+      <ul>
+        <li>Verifies HTTP <code>/health</code> endpoint to confirm container readiness.</li>
+        <li>Provides visual stage progression matrix and real-time console execution logs.</li>
+        <li>Eliminates human error through 100% hands-free release execution.</li>
+      </ul>
+
+      <div class="image-container">
+        <div class="image-placeholder short">
+          <div class="icon">&#128444;</div>
+          <strong>[ Figure 7.8: Jenkins Pipeline Dashboard (Stage View) ]</strong>
+          <span class="caption-hint">Upload screenshot of Jenkins Pipeline Stage View at http://localhost:9091/job/campus%20board/</span>
+        </div>
+        <div class="figure-caption">Figure 7.8: Jenkins CI/CD Pipeline Stage View</div>
+      </div>
+
+      <div class="image-container">
+        <div class="image-placeholder short">
+          <div class="icon">&#128444;</div>
+          <strong>[ Figure 7.9: Successful Jenkins Pipeline Console Execution ]</strong>
+          <span class="caption-hint">Upload screenshot of Jenkins Console Output ending with SUCCESS</span>
+        </div>
+        <div class="figure-caption">Figure 7.9: Successful Jenkins Pipeline Execution</div>
+      </div>
+
+      <h3 class="module-title">MODULE 7 — AUTOMATED TESTING</h3>
+      <p>
+        This module validates system stability before release. Pytest is integrated into the Jenkins pipeline stage so that regression errors halt deployment before containers enter production.
+      </p>
+    </div>
+
+    <div class="footer-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>18</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ================= PAGE 19: MODULE 7 CONT (PYTEST) ================= -->
+<div class="page" id="page-7">
+  <div class="page-frame">
+    <div class="header-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>19</span>
+    </div>
+
+    <div class="content-area">
+      <h4 class="sub-title">Main Functions:</h4>
+      <ul>
+        <li>Executes automated test assertions inside the containerized environment.</li>
+        <li>Validates <code>GET /health</code> microservice readiness (status 200 and healthy JSON payload).</li>
+        <li>Validates <code>GET /</code> landing page template rendering and header elements.</li>
+        <li>Validates <code>GET /api/events</code> JSON response format, fields, and initial data seeding.</li>
+        <li>Validates <code>POST /api/register</code> workflow: ticket code generation, seat count incrementation, and rejection of duplicate student roll numbers with HTTP 409 Conflict.</li>
+        <li>Validates <code>GET /api/admin/stats</code> administrative counters.</li>
+      </ul>
+
+      <p style="margin: 4px 0;">
+        <strong>Test File:</strong> <code>test_app.py</code><br>
+        <strong>Test Command:</strong> <code>python -m pytest test_app.py -v</code>
+      </p>
+
+      <div class="terminal-box">
+============================= test session starts ==============================
+platform linux -- Python 3.11.x, pytest-8.3.x, pluggy-1.5.x
+rootdir: /app
+collected 5 items
+
+test_app.py::test_health_check PASSED                                    [ 20%]
+test_app.py::test_home_page_status PASSED                                [ 40%]
+test_app.py::test_get_events_api PASSED                                  [ 60%]
+test_app.py::test_event_registration_workflow PASSED                     [ 80%]
+test_app.py::test_admin_stats_and_endpoints PASSED                       [100%]
+
+============================== 5 passed in 0.18s ===============================
+      </div>
+
+      <div class="image-container">
+        <div class="image-placeholder short">
+          <div class="icon">&#128444;</div>
+          <strong>[ Figure 7.10: Successful Automated Test Execution Output ]</strong>
+          <span class="caption-hint">Upload screenshot of Pytest execution inside container or Jenkins console</span>
+        </div>
+        <div class="figure-caption">Figure 7.10: Successful Automated Test Execution</div>
+      </div>
+    </div>
+
+    <div class="footer-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>19</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ================= PAGE 20: MODULE 8 (ANSIBLE) ================= -->
+<div class="page" id="page-20">
+  <div class="page-frame">
+    <div class="header-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>20</span>
+    </div>
+
+    <div class="content-area">
+      <h3 class="module-title">MODULE 8 — ANSIBLE DEPLOYMENT</h3>
+      <p>
+        Ansible is used to automate the deployment and container lifecycle of the Campus Event Board application. The deployment configuration is codified in a declarative YAML playbook (<code>docker-deploy.yml</code>).
+      </p>
+
+      <h4 class="sub-title">Main Functions:</h4>
+      <ul>
+        <li>Executes automated deployment playbook using Ansible engine.</li>
+        <li>Manages Docker container states idempotently via <code>community.docker.docker_container</code>.</li>
+        <li>Configures container name: <code>campus-event-ansible</code>.</li>
+        <li>Binds external port 5001 to internal container service port 5000.</li>
+        <li>Mounts persistent Docker volume <code>eventboard_data</code> to <code>/app/data</code>.</li>
+        <li>Enforces container restart policy (<code>unless-stopped</code>) for automated crash recovery.</li>
+        <li>Can be invoked directly from command-line or triggered automatically by the Jenkins pipeline.</li>
+      </ul>
+
+      <h4 class="sub-title">Deployment Configuration:</h4>
+      <div class="terminal-box" style="font-size: 8.5pt;">
+name: campus-event-ansible
+image: campus-event-ci
+published_ports:
+  - "5001:5000"
+volumes:
+  - "eventboard_data:/app/data"
+restart_policy: unless-stopped
+      </div>
+    </div>
+
+    <div class="footer-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>20</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ================= PAGE 21: ANSIBLE PLAYBOOK & MODULE 9 ================= -->
+<div class="page" id="page-21">
+  <div class="page-frame">
+    <div class="header-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>21</span>
+    </div>
+
+    <div class="content-area">
+      <div class="image-container">
+        <div class="image-placeholder short">
+          <div class="icon">&#128444;</div>
+          <strong>[ Figure 7.11: Ansible Deployment Playbook &amp; Execution Output ]</strong>
+          <span class="caption-hint">Upload screenshot of cat ansible/docker-deploy.yml and ansible-playbook execution</span>
+        </div>
+        <div class="figure-caption">Figure 7.11: Ansible Deployment Playbook</div>
+      </div>
+
+      <h3 class="module-title">MODULE 9 — PERSISTENT STORAGE</h3>
+      <p>
+        This module guarantees that event schedules and student registrations remain intact even when the container is stopped, updated, or recreated. A Docker Volume decouples stateful database data from transient container lifecycles.
+      </p>
+
+      <h4 class="sub-title">Main Functions:</h4>
+      <ul>
+        <li>Creates named persistent Docker volume: <code>eventboard_data</code>.</li>
+        <li>Mounts volume to container path <code>/app/data</code>.</li>
+        <li>Stores the SQLite relational database at <code>/app/data/events.db</code>.</li>
+        <li>Preserves all attendee passes and seating quotas across container rebuilds and CI deployments.</li>
+        <li>Allows the application container to be recreated without losing stored data.</li>
+      </ul>
+    </div>
+
+    <div class="footer-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>21</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ================= PAGE 22: STORAGE FLOW & MODULE 10 ================= -->
+<div class="page" id="page-22">
+  <div class="page-frame">
+    <div class="header-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>22</span>
+    </div>
+
+    <div class="content-area">
+      <p><strong>Storage Configuration:</strong> <code>eventboard_data:/app/data</code></p>
+
+      <h4 class="sub-title">Storage Flow:</h4>
+      <div class="image-container">
+        <div class="image-placeholder short">
+          <div class="icon">&#128444;</div>
+          <strong>[ Figure 5.3: Storage Flow Diagram ]</strong>
+          <span class="caption-hint">Upload Storage Flow diagram (Flask App &rarr; SQLite events.db &rarr; /app/data &rarr; Volume: eventboard_data &rarr; Host Storage)</span>
+        </div>
+        <div class="figure-caption">Figure 5.3: Persistent Storage Flow</div>
+      </div>
+
+      <div class="image-container">
+        <div class="image-placeholder short">
+          <div class="icon">&#128444;</div>
+          <strong>[ Figure 7.12: Docker Volume Inspection (docker volume ls &amp; inspect) ]</strong>
+          <span class="caption-hint">Upload screenshot of docker volume ls and docker volume inspect eventboard_data</span>
+        </div>
+        <div class="figure-caption">Figure 7.12: Eventboard Data Docker Volume</div>
+      </div>
+
+      <h3 class="module-title">MODULE 10 — ADMIN &amp; EVENT MANAGEMENT</h3>
+      <p>
+        This module provides the administrative control console for faculty and club coordinators. It enables real-time auditing of registration rosters, capacity adjustments, and event status toggling.
+      </p>
+
+      <h4 class="sub-title">Main Functions:</h4>
+      <ul>
+        <li>Presents aggregate metrics: total events, total capacity, registered attendees, and remaining seats.</li>
+        <li>Allows faculty to toggle event status between <em>Open</em> and <em>Closed</em>.</li>
+        <li>Displays detailed registration tables with ticket codes, student names, roll numbers, and contact details.</li>
+      </ul>
+    </div>
+
+    <div class="footer-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>22</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ================= PAGE 23: ADMIN DASHBOARD & MODULE 11 ================= -->
+<div class="page" id="page-23">
+  <div class="page-frame">
+    <div class="header-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>23</span>
+    </div>
+
+    <div class="content-area">
+      <p><strong>Admin Dashboard URL:</strong> <a href="http://localhost:5001/admin">http://localhost:5001/admin</a></p>
+
+      <div class="image-container">
+        <div class="image-placeholder tall">
+          <div class="icon">&#128444;</div>
+          <strong>[ Figure 7.13: Campus Event Board Admin Dashboard ]</strong>
+          <span class="caption-hint">Upload screenshot of Admin Dashboard (http://localhost:5001/admin) showing metrics &amp; registrations table</span>
+        </div>
+        <div class="figure-caption">Figure 7.13: Campus Event Board Admin Dashboard</div>
+      </div>
+
+      <h3 class="module-title">MODULE 11 — CI/CD INTEGRATION</h3>
+      <p>
+        This module synthesizes all distinct DevOps tools into a unified, seamless automation pipeline. Git, Jenkins, Docker, Pytest, and Ansible operate in concert to deliver hands-free testing and deployment.
+      </p>
+    </div>
+
+    <div class="footer-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>23</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ================= PAGE 24: MODULE 11 CONT & MODULE 12 ================= -->
+<div class="page" id="page-24">
+  <div class="page-frame">
+    <div class="header-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>24</span>
+    </div>
+
+    <div class="content-area">
+      <h4 class="sub-title">Main Functions:</h4>
+      <ul>
+        <li>Binds GitHub repository pushes to automated Jenkins pipeline executions.</li>
+        <li>Executes standardized multi-stage pipeline: Checkout &rarr; Docker Build &rarr; Pytest &rarr; Ansible Deploy &rarr; Health Verification.</li>
+        <li>Logs stage metrics and console output for centralized debugging.</li>
+        <li>Eliminates human error from manual command typing on target production servers.</li>
+      </ul>
+
+      <div class="image-container">
+        <div class="image-placeholder short">
+          <div class="icon">&#128444;</div>
+          <strong>[ Figure 7.14: Complete CI/CD Pipeline Execution Evidence ]</strong>
+          <span class="caption-hint">Upload screenshot of complete Jenkins pipeline stage view ending with SUCCESS</span>
+        </div>
+        <div class="figure-caption">Figure 7.14: Complete CI/CD Pipeline Execution</div>
+      </div>
+
+      <h3 class="module-title">MODULE 12 — APPLICATION &amp; DEPLOYMENT VERIFICATION</h3>
+      <p>
+        This module verifies that all subsystems function accurately following automated deployment across the application stack, container engine, database layer, and network ports.
+      </p>
+
+      <h4 class="sub-title">Verification Activities:</h4>
+      <ul>
+        <li>Inspecting running Docker container state and health status (<code>docker ps</code>).</li>
+        <li>Checking port accessibility on <code>http://localhost:5001</code>.</li>
+        <li>Testing student event discovery, search, and category filtering.</li>
+        <li>Performing live event registration and validating generated pass (<code>CIT-EVT-XXXXXX</code>).</li>
+        <li>Validating persistent storage across container restarts.</li>
+      </ul>
+    </div>
+
+    <div class="footer-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>24</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ================= PAGE 25: MODULE 12 CONT ================= -->
+<div class="page" id="page-25">
+  <div class="page-frame">
+    <div class="header-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>25</span>
+    </div>
+
+    <div class="content-area">
+      <ul>
+        <li>Confirming Docker Volume mapping (<code>docker volume inspect eventboard_data</code>).</li>
+        <li>Verifying Ansible playbook execution idempotency (<code>failed=0</code>).</li>
+        <li>Checking Jenkins pipeline status (<code>SUCCESS</code>).</li>
+        <li>Confirming attendee records in SQLite database using CLI queries.</li>
+      </ul>
+
+      <h4 class="sub-title" style="margin-top: 8px;">Important Pipeline Outputs:</h4>
+      <table style="width: 70%; margin: 6px auto;">
+        <tr><td><strong>Docker Build</strong></td><td class="center"><span class="badge-pass">SUCCESS</span></td></tr>
+        <tr><td><strong>Pytest Suite</strong></td><td class="center"><span class="badge-pass">5 PASSED</span></td></tr>
+        <tr><td><strong>Ansible Playbook</strong></td><td class="center"><span class="badge-pass">failed=0</span></td></tr>
+        <tr><td><strong>Pipeline Status</strong></td><td class="center"><span class="badge-pass">SUCCESS</span></td></tr>
+      </table>
+
+      <div class="image-container">
+        <div class="image-placeholder tall">
+          <div class="icon">&#128444;</div>
+          <strong>[ Figure 7.15: Successfully Deployed Campus Event Board Application ]</strong>
+          <span class="caption-hint">Upload screenshot of browser at http://localhost:5001 with active events and confirmed RSVP</span>
+        </div>
+        <div class="figure-caption">Figure 7.15: Successfully Deployed Campus Event Board Application</div>
+      </div>
+    </div>
+
+    <div class="footer-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>25</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ================= PAGE 26: RESULTS & COMMANDS USED ================= -->
+<div class="page" id="page-26">
+  <div class="page-frame">
+    <div class="header-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>26</span>
+    </div>
+
+    <div class="content-area">
+      <h2 class="section-title">18. RESULTS AND OUTPUT</h2>
+      <p>The implemented system successfully provides:</p>
+      <ul>
+        <li>Real-time campus event discovery with instant category filtering.</li>
+        <li>Live keyword search across event titles, descriptions, and venues.</li>
+        <li>Instant seat quota tracking with visual progress indicators.</li>
+        <li>One-click student RSVP with unique ticket codes (<code>CIT-EVT-XXXXXX</code>).</li>
+        <li>Duplicate registration rejection protecting seat allocations.</li>
+        <li>Admin dashboard for seat management and attendee roster exports.</li>
+        <li>Persistent SQLite storage maintained across container rebuilds.</li>
+        <li>Containerized portable execution through Docker.</li>
+        <li>Automated quality gates via Pytest test suite.</li>
+        <li>Multi-stage automated CI/CD pipeline managed by Jenkins.</li>
+        <li>Configuration management and automated deployment using Ansible.</li>
+      </ul>
+
+      <h2 class="section-title" style="margin-top: 10px;">19. COMMANDS USED</h2>
+
+      <h4 class="sub-title">1. Docker Environment</h4>
+      <div class="cmd-name">Check running containers:</div>
+      <div class="cmd-code">docker ps</div>
+
+      <div class="cmd-name">Check all containers:</div>
+      <div class="cmd-code">docker ps -a</div>
+
+      <div class="cmd-name">Start Ansible container:</div>
+      <div class="cmd-code">docker start ansible-docker-lab</div>
+
+      <div class="cmd-name">Start Jenkins container:</div>
+      <div class="cmd-code">docker start local-jenkins</div>
+
+      <h4 class="sub-title" style="margin-top: 8px;">2. Jenkins Commands</h4>
+      <div class="cmd-name">Fix Docker socket permissions for Jenkins:</div>
+      <div class="cmd-code">docker exec -u 0 local-jenkins chmod 666 /var/run/docker.sock</div>
+    </div>
+
+    <div class="footer-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>26</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ================= PAGE 27: COMMANDS CONT (BUILD & TEST) ================= -->
+<div class="page" id="page-27">
+  <div class="page-frame">
+    <div class="header-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>27</span>
+    </div>
+
+    <div class="content-area">
+      <div class="cmd-name">Verify Jenkins can access Docker:</div>
+      <div class="cmd-code">docker exec local-jenkins docker info</div>
+
+      <div class="cmd-name">Check Jenkins port:</div>
+      <div class="cmd-code">docker port local-jenkins</div>
+
+      <p style="margin: 4px 0 10px 0;"><strong>Jenkins URL:</strong> <a href="http://localhost:9091">http://localhost:9091</a></p>
+
+      <h4 class="sub-title">3. Docker Image Build</h4>
+      <div class="cmd-name">Build Docker image (executed in Jenkins or terminal):</div>
+      <div class="cmd-code">docker build -t campus-event-ci .</div>
+      <p style="margin: 2px 0 10px 0;">Creates Docker image: <code>campus-event-ci</code></p>
+
+      <h4 class="sub-title">4. Automated Testing</h4>
+      <div class="cmd-name">Run Pytest inside the built container:</div>
+      <div class="cmd-code">docker run --rm campus-event-ci python -m pytest test_app.py -v</div>
+      <p style="margin: 2px 0 10px 0;"><strong>Expected result:</strong> <code>5 passed in 0.18s</code></p>
+
+      <h4 class="sub-title">5. Ansible Deployment</h4>
+      <div class="cmd-name">Execute Ansible playbook via container:</div>
+      <div class="cmd-code">docker exec ansible-docker-lab ansible-playbook -i /inventory.ini /docker-deploy.yml</div>
+
+      <div class="cmd-name">Execute Ansible playbook locally:</div>
+      <div class="cmd-code">ansible-playbook -i ansible/inventory.ini ansible/docker-deploy.yml</div>
+    </div>
+
+    <div class="footer-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>27</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ================= PAGE 28: COMMANDS CONT (CONTAINER & VOLUME) ================= -->
+<div class="page" id="page-28">
+  <div class="page-frame">
+    <div class="header-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>28</span>
+    </div>
+
+    <div class="content-area">
+      <div class="cmd-name">View Ansible playbook content:</div>
+      <div class="cmd-code">cat ansible/docker-deploy.yml</div>
+
+      <h4 class="sub-title" style="margin-top: 10px;">6. Docker Container Verification</h4>
+      <div class="cmd-name">Check deployed container:</div>
+      <div class="cmd-code">docker ps --filter "name=campus-event-ansible"</div>
+      <p style="margin: 2px 0;">
+        <strong>Container Name:</strong> <code>campus-event-ansible</code><br>
+        <strong>Port Mapping:</strong> <code>5001:5000</code><br>
+        <strong>Application URL:</strong> <a href="http://localhost:5001">http://localhost:5001</a>
+      </p>
+
+      <h4 class="sub-title" style="margin-top: 10px;">7. Docker Volume Commands</h4>
+      <div class="cmd-name">List Docker volumes:</div>
+      <div class="cmd-code">docker volume ls</div>
+
+      <div class="cmd-name">Inspect volume persistence details:</div>
+      <div class="cmd-code">docker volume inspect eventboard_data</div>
+
+      <h4 class="sub-title" style="margin-top: 10px;">8. SQLite Database Commands</h4>
+      <div class="cmd-name">Display all registered events:</div>
+      <div class="cmd-code">sqlite3 -header -column data/events.db "SELECT id, title, registered_count, capacity, status FROM events;"</div>
+
+      <div class="cmd-name">Display attendee registrations:</div>
+      <div class="cmd-code">sqlite3 -header -column data/events.db "SELECT ticket_code, student_name, roll_no, email FROM registrations;"</div>
+    </div>
+
+    <div class="footer-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>28</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ================= PAGE 29: COMMANDS CONT (SQLITE & GIT) ================= -->
+<div class="page" id="page-29">
+  <div class="page-frame">
+    <div class="header-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>29</span>
+    </div>
+
+    <div class="content-area">
+      <div class="cmd-name">Display database tables:</div>
+      <div class="cmd-code">sqlite3 data/events.db ".tables"</div>
+
+      <h4 class="sub-title" style="margin-top: 10px;">9. Container Database Verification</h4>
+      <div class="cmd-name">Query SQLite inside the running container:</div>
+      <div class="cmd-code">docker exec campus-event-ansible python -c "import sqlite3; c=sqlite3.connect('/app/data/events.db'); [print(row) for row in c.execute('SELECT ticket_code, student_name, roll_no FROM registrations')]; c.close()"</div>
+
+      <p style="margin: 4px 0 10px 0;">
+        <strong>Host Database Location:</strong> <code>data/events.db</code><br>
+        <strong>Container Database Location:</strong> <code>/app/data/events.db</code>
+      </p>
+
+      <h4 class="sub-title">10. Git Commands Used</h4>
+      <div class="cmd-name">Initialize Git repository:</div>
+      <div class="cmd-code">git init</div>
+
+      <div class="cmd-name">Check status of working directory:</div>
+      <div class="cmd-code">git status</div>
+
+      <div class="cmd-name">Stage all changes:</div>
+      <div class="cmd-code">git add .</div>
+
+      <div class="cmd-name">Commit with meaningful message:</div>
+      <div class="cmd-code">git commit -m "Finalize Campus Event Board DevOps pipeline"</div>
+
+      <div class="cmd-name">Check current branch:</div>
+      <div class="cmd-code">git branch</div>
+    </div>
+
+    <div class="footer-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>29</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ================= PAGE 30: COMMANDS CONT (DOCKER & CHEATSHEET) ================= -->
+<div class="page" id="page-30">
+  <div class="page-frame">
+    <div class="header-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>30</span>
+    </div>
+
+    <div class="content-area">
+      <div class="cmd-name">Connect remote GitHub repository:</div>
+      <div class="cmd-code">git remote add origin https://github.com/AKIILESH/campus-event-board.git</div>
+
+      <div class="cmd-name">Push changes to remote main branch:</div>
+      <div class="cmd-code">git push -u origin main</div>
+
+      <div class="cmd-name">Pull latest updates from GitHub:</div>
+      <div class="cmd-code">git pull origin main</div>
+
+      <h4 class="sub-title" style="margin-top: 10px;">11. Useful Docker Management Commands</h4>
+      <div class="cmd-name">List local Docker images:</div>
+      <div class="cmd-code">docker images</div>
+
+      <div class="cmd-name">Stop running container:</div>
+      <div class="cmd-code">docker stop campus-event-ansible</div>
+
+      <div class="cmd-name">Start container:</div>
+      <div class="cmd-code">docker start campus-event-ansible</div>
+
+      <div class="cmd-name">View container logs:</div>
+      <div class="cmd-code">docker logs -f campus-event-ansible</div>
+
+      <h4 class="sub-title" style="margin-top: 10px;">12. Main Commands Summary for Faculty Viva</h4>
+      <div class="terminal-box" style="font-size: 8.5pt;">
+# 1. Build Docker image
+docker build -t campus-event-ci .
+
+# 2. Run automated test suite
+docker run --rm campus-event-ci python -m pytest test_app.py -v
+
+# 3. Deploy container with persistent storage
+docker run -d --name campus-event-ansible -p 5001:5000 -v eventboard_data:/app/data campus-event-ci
+
+# 4. Verify SQLite database
+sqlite3 data/events.db "SELECT * FROM events;"
+      </div>
+    </div>
+
+    <div class="footer-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>30</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ================= PAGE 31: ADVANTAGES & LIMITATIONS ================= -->
+<div class="page" id="page-31">
+  <div class="page-frame">
+    <div class="header-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>31</span>
+    </div>
+
+    <div class="content-area">
+      <h2 class="section-title">20. ADVANTAGES</h2>
+      <ul>
+        <li><strong>Elimination of Paper Notice Boards:</strong> Centralizes all university hackathons, workshops, and sports events on a single digital portal.</li>
+        <li><strong>Instant Pass Generation:</strong> Issues cryptographic ticket codes (<code>CIT-EVT-XXXXXX</code>) immediately upon registration.</li>
+        <li><strong>Capacity Safeguards:</strong> Live progress bars and duplicate registration rejections prevent overcrowding and double-booking.</li>
+        <li><strong>Automated Quality Assurance:</strong> Pytest suites prevent faulty code releases from reaching container deployments.</li>
+        <li><strong>Consistent Environments:</strong> Docker containers eliminate the "works on my machine" dilemma.</li>
+        <li><strong>Persistent State Storage:</strong> Dedicated Docker Volume (<code>eventboard_data</code>) guarantees that registrations survive container updates.</li>
+        <li><strong>Hands-Free Releases:</strong> Jenkins and Ansible automate the entire build-test-deploy chain.</li>
+        <li><strong>Administrative Efficiency:</strong> Live faculty dashboard streamlines attendance tracking and CSV rosters.</li>
+      </ul>
+
+      <h2 class="section-title" style="margin-top: 25px;">21. LIMITATIONS</h2>
+      <ul>
+        <li><strong>Local Embedded Database:</strong> The application uses SQLite, which is optimal for single-node deployments but lacks horizontal multi-master scaling.</li>
+        <li><strong>Authentication Scope:</strong> Student registration is credential-based (Roll Number and Email) rather than Single Sign-On (SSO) LDAP integration.</li>
+        <li><strong>Payment Gateway:</strong> Free events are fully supported; paid ticketing or fine payments are not integrated.</li>
+        <li><strong>Notification Gateway:</strong> Digital passes are saved locally on browser; automated SMS/WhatsApp alerts require third-party API integration.</li>
+        <li><strong>Single Host Execution:</strong> Currently orchestrated via Docker Engine rather than distributed Kubernetes clusters.</li>
+      </ul>
+    </div>
+
+    <div class="footer-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>31</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ================= PAGE 32: CONCLUSION & FUTURE ENHANCEMENTS ================= -->
+<div class="page" id="page-32">
+  <div class="page-frame">
+    <div class="header-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>32</span>
+    </div>
+
+    <div class="content-area">
+      <h2 class="section-title">22. CONCLUSION</h2>
+      <p>
+        The <strong>Campus Event Board</strong> successfully demonstrates the practical integration of an end-to-end full-stack web application with industry-standard DevOps engineering practices. The platform eliminates manual administrative overhead by enabling students to browse events, track capacity quotas, and receive digital passes through a reactive web interface. The administrative dashboard centralizes event scheduling and attendee management for faculty coordinators.
+      </p>
+      <p>
+        The project rigorously addresses all ten core components of the 23IT723 DevOps Laboratory syllabus. Git and GitHub govern version control, branching, and collaboration. Jenkins orchestrates a five-stage declarative CI/CD pipeline that compiles Docker images, runs automated Pytest quality gates, and triggers automated deployment. Docker containerizes the application to guarantee environment parity, while Ansible manages container provisioning idempotently. A dedicated Docker Volume (<code>eventboard_data</code>) guarantees persistent relational storage for SQLite records. The successful pipeline execution proves the real-world viability of:
+      </p>
+      <p style="text-align: center; font-weight: bold; margin: 4px 0 10px 0;">
+        GitHub &rarr; Jenkins CI &rarr; Docker Build &rarr; Pytest &rarr; Ansible &rarr; Docker Container (:5001) &rarr; SQLite Volume
+      </p>
+
+      <h2 class="section-title" style="margin-top: 10px;">23. FUTURE ENHANCEMENTS</h2>
+      <ol style="margin-left: 20px; font-size: 9.6pt; line-height: 1.4;">
+        <li><strong>Campus SSO Integration:</strong> Authenticate students through Anna University / CIT LDAP portal.</li>
+        <li><strong>QR Code Ticket Scanning:</strong> QR code verification on attendee digital passes for rapid check-in at event venues.</li>
+        <li><strong>Email &amp; SMS Dispatcher:</strong> Automated pass delivery and reminder notifications via SendGrid/Twilio.</li>
+        <li><strong>PostgreSQL Migration:</strong> Transition from embedded SQLite to cloud-hosted PostgreSQL.</li>
+        <li><strong>Kubernetes Orchestration:</strong> Deploy multi-replica pods managed by Helm charts with horizontal auto-scaling.</li>
+        <li><strong>Centralized Telemetry:</strong> Integrate Prometheus and Grafana dashboards for microservice latency and error rate observability.</li>
+      </ol>
+    </div>
+
+    <div class="footer-running">
+      <span>23IT723 – DevOps Laboratory | Final Project</span>
+      <span>32</span>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
